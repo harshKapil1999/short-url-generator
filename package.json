@@ -1,0 +1,20 @@
+{
+  "name": "short-url-generator",
+  "version": "1.0.0",
+  "description": "express app that generates a short url and redirects to the original url on click and keeps track of the no of clicks and timestamps",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "harsh kapil",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.4",
+    "nodemon": "^3.0.2",
+    "short-unique-id": "^5.0.3"
+  }
+}
