@@ -8,13 +8,18 @@ async function handleGenerateNewShortURL(req, res) {
     if (!body.url) return res.status(400).json({ error: "url is required"})
     const uid = new ShortUniqueId({ length: 8 });
     const shortUniqueID = uid.rnd();
+
     await URL.create({
         shortId: shortUniqueID,
         redirectURL: body.url,
         visitHistory: [],
     });
+
+    return res.render("home", {
+        id: shortUniqueID,
+    });
     
-    return res.json({ id: shortUniqueID });
+    //return res.json({ id: shortUniqueID });
 }
 
 async function handleGetAnalytics(req, res) {

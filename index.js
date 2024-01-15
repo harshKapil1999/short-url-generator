@@ -2,7 +2,11 @@ const express = require("express");
 require('dotenv').config();
 
 const mongoose = require('mongoose');
+const path = require("path");
+
 const urlRoute = require('./routes/url.router.js');
+const staticRouter = require('./routes/staticRouter.js')
+const userRoute = require("./routes/user.router.js")
 const URL = require('./models/url.model.js');
 
 const app = express();
@@ -17,11 +21,17 @@ async function ConnectMongoDB() {
 
 ConnectMongoDB();
 
+app.set("view engine", "ejs");
+app.set("views", path.resolve("./views"));
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/url", urlRoute);
+app.use("/user", userRoute);
+app.use("/", staticRouter);
 
-app.get('/:shortId', async (req, res) => {
+app.get('/url/:shortId', async (req, res) => {
     const shortId = req.params.shortId;
     const entry = await URL.findOneAndUpdate(
         {
