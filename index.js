@@ -1,13 +1,14 @@
 const express = require("express");
 require('dotenv').config();
-
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const path = require("path");
 
 const urlRoute = require('./routes/url.router.js');
-const staticRouter = require('./routes/staticRouter.js')
+const staticRouter = require('./routes/static.router.js')
 const userRoute = require("./routes/user.router.js")
 const URL = require('./models/url.model.js');
+const { checkForAuthentication, restrictTo } = require('./middlewares/auth.middleware.js')
 
 const app = express();
 const PORT = process.env.PORT;
@@ -26,10 +27,13 @@ app.set("views", path.resolve("./views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(checkForAuthentication);
 
-app.use("/url", urlRoute);
+app.use("/url", restrictTo(["NORMAL"]), urlRoute);
 app.use("/user", userRoute);
 app.use("/", staticRouter);
+
 
 app.get('/url/:shortId', async (req, res) => {
     const shortId = req.params.shortId;
